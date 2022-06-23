@@ -10,7 +10,7 @@ class NodoArvore:
         self.__direita = None
     
     def __del__(self): 
-        print(f'Nodo de chave \'{self.__chave}\' deletado.')
+        print(f'Nodo de chave \'{self.__chave}\' removido.')
         
     def __repr__(self):
         return '%s <- %s -> %s' % (self.__esquerda and self.__esquerda.__chave,
@@ -52,30 +52,38 @@ class NodoArvore:
             else:
                 self.__esquerda.insere(nodo)
                 
-        # def remove(self, valor):
-        #     if self is None:
-        #         print(f'Valor {valor} não foi encontrado.')
-        #         return
-        #     else:
-        #         if self.__chave == valor:
-        #             #remove
-        #             if self.__direita is not None:
+        def remove(self, valor):
+            if self is None:
+                print(f'Valor {valor} não foi encontrado.')
+                return
+            else:
+                if self.__chave == valor:
+                    #remove
+                    if self.__direita is None and self.__esquerda is None:
+                        # não tem nodos folha
+                        del self
+                    elif self.__direita is None and self.__esquerda is not None:
+                        # tem um nodo folha à esquerda
+                    
+                    elif self.__direita is not None and self.__esquerda is None:
+                        # tem um nodo folha à direita
                         
-        #             elif :
-        #             else:
-        #         elif self.__chave < valor:
-        #             #direita
-        #             if self.__direita is None:
-        #                 print(f'Valor {valor} não foi encontrado.')
-        #             else:
-        #                 self.__direita.remove(valor)
-        #         else:
-        #             #esquerda
-        #             if self.__esquerda is None:
-        #                 print(f'Valor {valor} não foi encontrado.')
-        #                 return
-        #             else:
-        #                 self.__esquerda.remove(valor)
+                    else:
+                        # tem dois nodos folha
+                        
+                elif self.__chave < valor:
+                    #direita
+                    if self.__direita is None:
+                        print(f'Valor {valor} não foi encontrado.')
+                    else:
+                        self.__direita.remove(valor)
+                else:
+                    #esquerda
+                    if self.__esquerda is None:
+                        print(f'Valor {valor} não foi encontrado.')
+                        return
+                    else:
+                        self.__esquerda.remove(valor)
             
 
 # Árvore 1
