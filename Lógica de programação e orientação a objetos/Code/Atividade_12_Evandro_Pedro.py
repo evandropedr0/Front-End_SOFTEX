@@ -1,8 +1,9 @@
-# Crie uma árvore para cada lista abaixo, adicione um valor nela e remova outro, mas,
-# em pelo menos uma das árvores, a remoção deve ser de um nó com dois filhos.
-# Lista1 = 45,20,30,60,81,97,100,7,8,4
-# Lista2 = 15,6,18,3,7,16,20,4
-
+'''
+Crie uma árvore para cada lista abaixo, adicione um valor nela e remova outro, mas,
+em pelo menos uma das árvores, a remoção deve ser de um nó com dois filhos.
+Lista1 = 45,20,30,60,81,97,100,7,8,4
+Lista2 = 15,6,18,3,7,16,20,4
+'''
 class NodoArvore:   
     def __init__(self, chave=None):
         self.__chave = chave
@@ -19,6 +20,9 @@ class NodoArvore:
 
     def getDireita(self):
         return self.__direita
+    
+    def getChave(self):
+        return self.__chave
 
     def em_ordem(self):
         if self is None:
@@ -56,66 +60,46 @@ class NodoArvore:
                 self.__esquerda.insere(nodo)
                 
     def remove(self, valor):
-        if self is None:
-            print(f'Valor {valor} não foi encontrado.')
-            return
-        else:
-            if self.__chave == valor: # remove
-                
-                if self.__direita is None and self.__esquerda is None:
-                    # não tem nodos folha
-                    aux = self
-                    self = None
-                    del aux
-                    print(f'Valor {valor} removido com sucesso.')
-
-                elif self.__direita is None and self.__esquerda is not None:
-                    # tem só um nodo folha à esquerda
-                    aux = self
-                    esquerda = self.__esquerda
-                    self.__esquerda = self.__esquerda.getEsquerda()
-                    self.__direita = self.__esquerda.getDireita()
-                    self = esquerda
-                    del aux
-                    print(f'Valor {valor} removido com sucesso.')
-
-                elif self.__direita is not None and self.__esquerda is None:
-                    # tem só um nodo folha à direita
-                    aux = self
-                    direita = self.__direita
-                    self.__esquerda = self.__direita.getEsquerda()
-                    self.__direita = self.__direita.getDireita()
-                    self = direita
-                    del aux
-                    print(f'Valor {valor} removido com sucesso.')
-                else:
-                    # tem dois nodos folha
-                    # aux = self
-                    # esquerda = self.__esquerda
-                    # direita = self.__direita
-                    # self.__esquerda = self.__direita.getEsquerda()
-                    # self.__direita = self.__direita.getDireita()
-                    # self = direita
-                    # self.insere(esquerda)
-                    
-                    # del aux
-                    self = self.__direita
-                    print(f'Valor {valor} removido com sucesso.')
-
-            elif self.__chave < valor:
-                # direita
-                if self.__direita is None:
-                    print(f'Valor {valor} não foi encontrado.')
-                else:
-                    self.__direita.remove(valor)
-
+        if self.__chave < valor: # direita
+            if self.__direita is None:
+                print(f'Valor {valor} não foi encontrado.')
             else:
-                # esquerda
-                if self.__esquerda is None:
-                    print(f'Valor {valor} não foi encontrado.')
-                    return
-                else:
-                    self.__esquerda.remove(valor)
+                self.__direita = self.__direita.remove(valor)
+
+        elif self.__chave > valor: # esquerda
+            if self.__esquerda is None:
+                print(f'Valor {valor} não foi encontrado.')
+                return
+            else:
+                self.__esquerda = self.__esquerda.remove(valor)
+                
+        else: # remover
+            print(f'Valor {self.__chave} encontrado.')
+            if self.__direita is None and self.__esquerda is None:
+                # não tem nodos filho
+                print(f'Valor {valor} removido com sucesso.')
+                return None
+
+            if self.__direita is None:
+                # tem só um nodo filho à esquerda
+                print(f'Valor {valor} removido com sucesso.')
+                return self.__esquerda
+
+            if self.__esquerda is None:
+                # tem só um nodo filho à direita
+                print(f'Valor {valor} removido com sucesso.')
+                return self.__direita
+            
+            # tem dois nodos filho
+            aux = self.__direita
+            esquerda = self.getEsquerda()
+            self.__chave = self.__direita.getChave()
+            self.__esquerda = self.__direita.getEsquerda()
+            self.__direita = self.__direita.getDireita()
+            self.insere(esquerda)
+            print(f'Valor {valor} removido com sucesso.')
+            del aux
+        return self
                         
     def printArvore(self):
         if self is not None:
@@ -126,35 +110,40 @@ class NodoArvore:
             if self.__direita is not None:
                 self.__direita.printArvore()
                 
-        
-
-
 # Árvore 1
 lista1 = [45,20,30,60,81,97,100,7,8,4]
 arvore1 = NodoArvore(lista1[0])
 for chave in lista1[1:]:
     arvore1.insere(NodoArvore(chave))
 
+print('Árvore 1:')
 arvore1.printArvore()
-print('Árvore 1 em ordem crescente: ')
-arvore1.em_ordem()
-print('Adicionando o valor 50 à árvore 1 e imprimindo novamente em ordem crescente:')
-arvore1.insere(NodoArvore(50))
-arvore1.em_ordem()
+num = 50
+print(f'Adicionando o valor {num} à árvore 1 e imprimindo novamente:')
+arvore1.insere(NodoArvore(num))
+arvore1.printArvore()
 
-print('Removendo elemento 20 da árvore 1:')
-arvore1.remove(20)
+num = 60
+print(f'Removendo elemento {num} da árvore 1:')
+arvore1.remove(num)
 print('Árvore 1 atualizada:')
 arvore1.printArvore()
 
-# # Árvore 2
-# lista2 = [15,6,18,3,7,16,20,4]
-# arvore2 = NodoArvore(lista2[0])
-# for chave in lista2[1:]:
-#     arvore2.insere(NodoArvore(chave))
-# print("Primeiros elementos da árvore 2: ", arvore2)
-# print('Árvore 2 em ordem crescente: ')
-# arvore2.em_ordem()
-# print('Adicionando o valor 8 à árvore 2 e imprimindo novamente em ordem crescente:')
-# arvore2.insere(NodoArvore(8))
-# arvore2.em_ordem()
+# Árvore 2
+lista2 = [15,6,18,3,7,16,20,4]
+arvore2 = NodoArvore(lista2[0])
+for chave in lista2[1:]:
+    arvore2.insere(NodoArvore(chave))
+
+print('Árvore 2:')
+arvore2.printArvore()
+num = 2
+print(f'Adicionando o valor {num} à árvore 2 e imprimindo novamente:')
+arvore2.insere(NodoArvore(num))
+arvore2.printArvore()
+
+num = 18
+print(f'Removendo elemento {num} da árvore 2:')
+arvore2.remove(num)
+print('Árvore 2 atualizada:')
+arvore2.printArvore()
